@@ -13,7 +13,6 @@ export enum UserRole {
 export class User extends Model<User> {
   @PrimaryKey
   @AutoIncrement
-  @Default(DataType.INTEGER)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -31,6 +30,12 @@ export class User extends Model<User> {
     allowNull: false,
   })
   name: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  hash: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(UserRole)),

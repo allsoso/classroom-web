@@ -8,7 +8,6 @@ export enum QuestionType {
 export class Question extends Model<Question> {
   @PrimaryKey
   @AutoIncrement
-  @Default(DataType.INTEGER)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,

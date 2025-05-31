@@ -1,4 +1,4 @@
-import { Column, DataType, Model, PrimaryKey, AutoIncrement, Default } from "sequelize-typescript";
+import { Column, DataType, Model, PrimaryKey, AutoIncrement, Default, Table } from "sequelize-typescript";
 
 export enum ContentType {
     VIDEO = 'VIDEO',
@@ -6,10 +6,13 @@ export enum ContentType {
     TEXT = 'TEXT',
 }
 
+@Table({
+  tableName: 'contents',
+  paranoid:true
+})
 export class Content extends Model<Content> {
   @PrimaryKey
   @AutoIncrement
-  @Default(DataType.INTEGER)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
