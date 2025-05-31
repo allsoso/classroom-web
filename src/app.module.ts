@@ -5,6 +5,11 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/models/user.model';
 import { QuestionsModule } from './questions/questions.module';
 import { ContentsModule } from './contents/contents.module';
+import { Content } from './contents/models/content.model';
+import { Question } from './questions/models/question.model';
+import { VideoModule } from './contents/video/video.module';
+import { Video } from './contents/video/models/video.model';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,7 +25,7 @@ import { ContentsModule } from './contents/contents.module';
         username: configService.get('DB_APP_USERNAME'),
         password: configService.get('DB_APP_PWD'),
         database: configService.get('DB_APP_DATABASE'),
-        models: [User],
+        models: [User,Content,Question,Video],
         autoLoadModels: true,
         synchronize: true,
       }),
@@ -29,6 +34,8 @@ import { ContentsModule } from './contents/contents.module';
     UsersModule,
     QuestionsModule,
     ContentsModule,
+    VideoModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
