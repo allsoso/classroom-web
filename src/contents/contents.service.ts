@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateContentDto } from './dto/create-content.dto';
-import { UpdateContentDto } from './dto/update-content.dto';
 import { Content } from './models/content.model';
 import { InjectModel } from '@nestjs/sequelize';
 
