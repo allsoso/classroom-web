@@ -3,6 +3,7 @@ import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
 import { Video } from './models/video.model';
 import { InjectModel } from '@nestjs/sequelize';
+import { ContentType } from '../models/content.model';
 
 @Injectable()
 export class VideoService {
@@ -12,7 +13,10 @@ export class VideoService {
   ) {}
 
   create(createVideoDto: CreateVideoDto) {
-    return this.videoModel.create(createVideoDto as any);
+    return this.videoModel.create({
+      ...createVideoDto,
+      type: ContentType.VIDEO
+    } as any);
   }
 
   findAll() {
