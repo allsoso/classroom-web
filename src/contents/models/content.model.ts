@@ -3,8 +3,7 @@ import { Question } from "../../questions/models/question.model";
 
 export enum ContentType {
     VIDEO = 'VIDEO',
-    IMAGE = 'IMAGE',
-    TEXT = 'TEXT',
+    PDF = 'PDF',
 }
 
 @Table({
