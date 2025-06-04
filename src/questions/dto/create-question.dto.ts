@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsEnum, IsNumber, IsString, IsOptional } from "class-validator";
 import { QuestionType } from "../models/question.model";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -39,4 +39,13 @@ export class CreateQuestionDto {
     })
     @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'ID do conteúdo deve ser um número' })
     id_content: number;
+
+    @ApiProperty({
+        description: 'ID da questão pai (caso esta seja uma questão relacionada)',
+        example: 1,
+        required: false,
+    })
+    @IsOptional()
+    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'ID da questão pai deve ser um número' })
+    id_parent_question?: number;
 }

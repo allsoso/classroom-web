@@ -20,6 +20,9 @@ export class QuestionResponseDto {
   @ApiProperty()
   id_content: number;
 
+  @ApiProperty({ required: false, nullable: true })
+  id_parent_question: number | null;
+
   @ApiProperty()
   createdAt: Date;
 

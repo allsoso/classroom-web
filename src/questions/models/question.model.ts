@@ -55,6 +55,17 @@ export class Question extends Model<Question> {
   @BelongsTo(() => Content)
   content: Content;
 
+  @ForeignKey(() => Question)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: null
+  })
+  id_parent_question: number;
+
+  @BelongsTo(() => Question)
+  parent_question: Question;
+
   @CreatedAt
   declare createdAt: Date;
 

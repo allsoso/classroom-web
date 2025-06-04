@@ -23,6 +23,7 @@ export class QuestionsService {
       private: question.private,
       content_position: question.content_position,
       id_content: question.id_content,
+      id_parent_question: question.id_parent_question,
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
     };
