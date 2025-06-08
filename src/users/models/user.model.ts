@@ -1,4 +1,6 @@
-import { AutoIncrement, Column, CreatedAt, DataType, Default, DeletedAt, Model, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript';
+import { AutoIncrement, BelongsToMany, Column, CreatedAt, DataType, Default, DeletedAt, Model, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript';
+import { Notification } from '../notifications/models/notification.model';
+import { UserNotified } from '../notifications/models/users-notified.model';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -42,6 +44,9 @@ export class User extends Model<User> {
     allowNull: false,
   })
   role: UserRole;
+
+  @BelongsToMany(() => Notification, () => UserNotified)
+  notifications: Notification[];
 
   @CreatedAt
   declare createdAt: Date;
