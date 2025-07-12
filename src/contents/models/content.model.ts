@@ -1,5 +1,7 @@
-import { Column, DataType, Model, PrimaryKey, AutoIncrement, Default, Table, HasOne, CreatedAt, UpdatedAt, DeletedAt } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, Model, PrimaryKey, AutoIncrement, Default, Table, HasMany, CreatedAt, UpdatedAt, DeletedAt } from "sequelize-typescript";
 import { Question } from "../../questions/models/question.model";
+import { Classroom } from "../../classroom/models/classroom.model";
+import { ClassroomContent } from "../../classroom/models/classroom-content.model";
 
 export enum ContentType {
     VIDEO = 'VIDEO',
@@ -37,8 +39,11 @@ export class Content extends Model<Content> {
   })
   type: ContentType;
 
-  @HasOne(() => Question)
-  question: Question;
+  @HasMany(() => Question)
+  questions: Question[];
+
+  @BelongsToMany(() => Classroom, () => ClassroomContent)
+  classrooms: Classroom[];
 
   @CreatedAt
   declare createdAt: Date;

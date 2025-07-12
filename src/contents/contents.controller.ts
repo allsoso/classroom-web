@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, BadRequestException } from '@nestjs/common';
 import { ContentsService } from './contents.service';
 
 @Controller('contents')
@@ -10,13 +10,19 @@ export class ContentsController {
     return this.contentsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contentsService.findOne(+id);
+  @Get('content/:id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    if (isNaN(id)) {
+      throw new BadRequestException('ID deve ser um número válido');
+    }
+    return this.contentsService.findOne(id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contentsService.remove(+id);
+  @Delete('content/:id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    if (isNaN(id)) {
+      throw new BadRequestException('ID deve ser um número válido');
+    }
+    return this.contentsService.remove(id);
   }
 }

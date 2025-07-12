@@ -1,5 +1,5 @@
-import { IsString } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { IsString, IsOptional, IsNumberString } from "class-validator";
+import { ApiProperty, ApiConsumes } from "@nestjs/swagger";
 
 export class CreateVideoDto {
     @ApiProperty({
@@ -17,9 +17,17 @@ export class CreateVideoDto {
     content: string;
 
     @ApiProperty({
-        description: 'URL do vídeo',
-        example: 'https://www.youtube.com/watch?v=abc123'
+        description: 'ID da sala de aula à qual o vídeo pertence',
+        example: '1'
     })
-    @IsString({ message: 'URL deve ser uma string' })
-    url: string;
+    @IsNumberString({}, { message: 'ID da sala de aula deve ser um número válido' })
+    classroom_id: string;
+
+    @ApiProperty({
+        description: 'Arquivo de vídeo',
+        type: 'string',
+        format: 'binary'
+    })
+    @IsOptional()
+    videoFile?: Express.Multer.File;
 }
