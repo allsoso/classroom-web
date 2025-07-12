@@ -8,6 +8,9 @@ export class QuestionResponseDto {
   @ApiProperty()
   question: string;
 
+  @ApiProperty({ required: false, nullable: true })
+  answer: string | null;
+
   @ApiProperty({ enum: QuestionType })
   type: QuestionType;
 

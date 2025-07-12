@@ -12,6 +12,15 @@ export class CreateQuestionDto {
     question: string;
 
     @ApiProperty({
+        description: 'Resposta da pergunta',
+        example: 'Brasília é a capital do Brasil.',
+        required: false,
+    })
+    @IsOptional()
+    @IsString({ message: 'Resposta deve ser uma string' })
+    answer?: string;
+
+    @ApiProperty({
         enum: QuestionType,
         description: 'Tipo de pergunta',
         example: QuestionType.QUESTION,

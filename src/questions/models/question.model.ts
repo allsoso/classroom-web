@@ -23,37 +23,44 @@ export class Question extends Model<Question> {
     type: DataType.STRING,
     allowNull: false,
   })
-  question: string;
+  declare question: string;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true,
+    defaultValue: null,
+  })
+  declare answer: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(QuestionType)),
     allowNull: false,
   })
-  type: QuestionType;
+  declare type: QuestionType;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   })
-  private: boolean;
+  declare private: boolean;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
     defaultValue: null,
   })
-  content_position: string;
+  declare content_position: string;
 
   @ForeignKey(() => Content)
   @Column({
     type: DataType.INTEGER,
     allowNull: false
   })
-  id_content: number;
+  declare id_content: number;
 
   @BelongsTo(() => Content)
-  content: Content;
+  declare content: Content;
 
   @ForeignKey(() => Question)
   @Column({
@@ -61,10 +68,10 @@ export class Question extends Model<Question> {
     allowNull: true,
     defaultValue: null
   })
-  id_parent_question: number;
+  declare id_parent_question: number;
 
   @BelongsTo(() => Question)
-  parent_question: Question;
+  declare parent_question: Question;
 
   @CreatedAt
   declare createdAt: Date;

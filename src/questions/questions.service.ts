@@ -19,6 +19,7 @@ export class QuestionsService {
     return {
       id: question.id,
       question: question.question,
+      answer: question.answer,
       type: question.type,
       private: question.private,
       content_position: question.content_position,
@@ -76,5 +77,30 @@ export class QuestionsService {
     }
     await question.destroy();
     return this.mapToResponseDto(question);
+  }
+
+  async findByContent(contentId: number): Promise<QuestionResponseDto[]> {
+    await this.verifyContentExists(contentId);
+    
+    const questions = await this.questionModel.findAll({
+      where: { id_content: contentId },
+      order: [['createdAt', 'ASC']]
+    });
+    
+    return questions.map(question => this.mapToResponseDto(question));
+  }
+
+  async updateAnswer(id: number, answer: string): Promise<QuestionResponseDto> {
+    const question = await this.questionModel.findByPk(id);
+    if (!question) {
+      throw new NotFoundException(`Pergunta com ID ${id} não encontrada`);
+    }
+    
+    await this.questionModel.update({ answer }, { where: { id } });
+    const updatedQuestion = await this.questionModel.findByPk(id);
+    if (!updatedQuestion) {
+      throw new NotFoundException(`Pergunta com ID ${id} não encontrada`);
+    }
+    return this.mapToResponseDto(updatedQuestion);
   }
 }
