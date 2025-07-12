@@ -9,13 +9,6 @@ import { UserResponseDto } from './dto/user-response.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  @ApiBody({ type: CreateUserDto })
-  @ApiResponse({ type: UserResponseDto })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
   @Get()
   @ApiResponse({ type: [UserResponseDto] })
   findAll() {

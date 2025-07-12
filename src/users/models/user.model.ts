@@ -1,6 +1,7 @@
-import { AutoIncrement, BelongsToMany, Column, CreatedAt, DataType, Default, DeletedAt, Model, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript';
+import { AutoIncrement, BelongsToMany, Column, CreatedAt, DataType, Default, DeletedAt, Model, PrimaryKey, Table, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Notification } from '../notifications/models/notification.model';
 import { UserNotified } from '../notifications/models/users-notified.model';
+import { Classroom } from '../../classroom/models/classroom.model';
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -25,28 +26,38 @@ export class User extends Model<User> {
     type: DataType.STRING,
     allowNull: false,
   })
-  email: string;
+  declare email: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  name: string;
+  declare name: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  hash: string;
+  declare hash: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(UserRole)),
     allowNull: false,
   })
-  role: UserRole;
+  declare role: UserRole;
 
   @BelongsToMany(() => Notification, () => UserNotified)
-  notifications: Notification[];
+  declare notifications: Notification[];
+
+  @ForeignKey(() => Classroom)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  declare classroom_id: number;
+
+  @BelongsTo(() => Classroom)
+  declare classroom: Classroom;
 
   @CreatedAt
   declare createdAt: Date;
