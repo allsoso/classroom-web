@@ -1,5 +1,6 @@
 import { Column, Model, PrimaryKey, AutoIncrement, Default, DataType, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, Table } from "sequelize-typescript";
 import { Content } from "../../contents/models/content.model";
+import { User } from "../../users/models/user.model";
 
 export enum QuestionType {
     COMMENT = 'COMENTARIO',
@@ -72,6 +73,27 @@ export class Question extends Model<Question> {
 
   @BelongsTo(() => Question)
   declare parent_question: Question;
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false
+  })
+  declare id_created_by: number;
+
+  @BelongsTo(() => User, 'id_created_by')
+  declare created_by: User;
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: null
+  })
+  declare id_answered_by: number;
+
+  @BelongsTo(() => User, 'id_answered_by')
+  declare answered_by: User;
 
   @CreatedAt
   declare createdAt: Date;

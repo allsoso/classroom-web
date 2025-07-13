@@ -5,6 +5,7 @@ import { Question } from './models/question.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { QuestionResponseDto } from './dto/question-response.dto';
 import { Content } from '../contents/models/content.model';
+import { User } from '../users/models/user.model';
 
 @Injectable()
 export class QuestionsService {
@@ -13,6 +14,8 @@ export class QuestionsService {
     private questionModel: typeof Question,
     @InjectModel(Content)
     private contentModel: typeof Content,
+    @InjectModel(User)
+    private userModel: typeof User,
   ) {}
 
   private mapToResponseDto(question: Question): QuestionResponseDto {
@@ -25,6 +28,8 @@ export class QuestionsService {
       content_position: question.content_position,
       id_content: question.id_content,
       id_parent_question: question.id_parent_question,
+      id_created_by: question.id_created_by,
+      id_answered_by: question.id_answered_by,
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
     };
@@ -37,10 +42,26 @@ export class QuestionsService {
     }
   }
 
+  private async verifyUserExists(userId: number): Promise<void> {
+    const user = await this.userModel.findByPk(userId);
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${userId} não encontrado`);
+    }
+  }
+
   async create(createQuestionDto: CreateQuestionDto): Promise<QuestionResponseDto> {
     if (createQuestionDto.id_content) {
       await this.verifyContentExists(createQuestionDto.id_content);
     }
+    
+    if (createQuestionDto.id_created_by) {
+      await this.verifyUserExists(createQuestionDto.id_created_by);
+    }
+    
+    if (createQuestionDto.id_answered_by) {
+      await this.verifyUserExists(createQuestionDto.id_answered_by);
+    }
+    
     const question = await this.questionModel.create(createQuestionDto as any);
     return this.mapToResponseDto(question);
   }
@@ -59,9 +80,18 @@ export class QuestionsService {
   }
 
   async update(id: number, updateQuestionDto: UpdateQuestionDto): Promise<QuestionResponseDto> {
-      if (updateQuestionDto.id_content) {
+    if (updateQuestionDto.id_content) {
       await this.verifyContentExists(updateQuestionDto.id_content);
     }
+    
+    if (updateQuestionDto.id_created_by) {
+      await this.verifyUserExists(updateQuestionDto.id_created_by);
+    }
+    
+    if (updateQuestionDto.id_answered_by) {
+      await this.verifyUserExists(updateQuestionDto.id_answered_by);
+    }
+    
     await this.questionModel.update(updateQuestionDto, { where: { id } });
     const updatedQuestion = await this.questionModel.findByPk(id);
     if (!updatedQuestion) {
@@ -90,13 +120,20 @@ export class QuestionsService {
     return questions.map(question => this.mapToResponseDto(question));
   }
 
-  async updateAnswer(id: number, answer: string): Promise<QuestionResponseDto> {
+  async updateAnswer(id: number, updateAnswerDto: { answer: string; id_answered_by?: number }): Promise<QuestionResponseDto> {
     const question = await this.questionModel.findByPk(id);
     if (!question) {
       throw new NotFoundException(`Pergunta com ID ${id} não encontrada`);
     }
     
-    await this.questionModel.update({ answer }, { where: { id } });
+    if (updateAnswerDto.id_answered_by) {
+      await this.verifyUserExists(updateAnswerDto.id_answered_by);
+    }
+    
+    await this.questionModel.update({ 
+      answer: updateAnswerDto.answer,
+      id_answered_by: updateAnswerDto.id_answered_by 
+    }, { where: { id } });
     const updatedQuestion = await this.questionModel.findByPk(id);
     if (!updatedQuestion) {
       throw new NotFoundException(`Pergunta com ID ${id} não encontrada`);

@@ -57,4 +57,20 @@ export class CreateQuestionDto {
     @IsOptional()
     @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'ID da questão pai deve ser um número' })
     id_parent_question?: number;
+
+    @ApiProperty({
+        description: 'ID do usuário que criou a pergunta',
+        example: 1,
+    })
+    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'ID do usuário criador deve ser um número' })
+    id_created_by: number;
+
+    @ApiProperty({
+        description: 'ID do usuário que respondeu a pergunta',
+        example: 1,
+        required: false,
+    })
+    @IsOptional()
+    @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'ID do usuário que respondeu deve ser um número' })
+    id_answered_by?: number;
 }

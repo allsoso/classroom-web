@@ -45,7 +45,7 @@ export class QuestionsController {
   @ApiBody({ type: UpdateAnswerDto })
   @ApiResponse({ type: QuestionResponseDto })
   updateAnswer(@Param('id', ParseIntPipe) id: number, @Body() updateAnswerDto: UpdateAnswerDto) {
-    return this.questionsService.updateAnswer(+id, updateAnswerDto.answer);
+    return this.questionsService.updateAnswer(+id, updateAnswerDto);
   }
 
   @Delete(':id')
